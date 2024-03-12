@@ -7,12 +7,14 @@
 
 package boj_1912_연속합;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 	
 	static int N;
 	static int[] arr;
+	static int[] D;
 	
 	public static void main(String[] args) {
 		
@@ -20,11 +22,35 @@ public class Main {
 		
 		N = sc.nextInt();				// 1 <= N <= 100,000
 		arr = new int[N];
+		D = new int[N];
 		
 		for(int i = 0; i < N; i++) {
 			arr[i] = sc.nextInt();		// -1,000 <= arr[i] <= 1,000
 		}
 
+		/*
+		 * D[i] = 맨끝부터 현재자리까지의 숫자의 합
+		 * 만약에 D[i+1]의 값이 음수면, 굳이 더할 필요가 없기 때문에 D[i] = arr[i]
+		 */
+		
+		int max = Integer.MIN_VALUE;
+		
+		for(int i = N-1; i >= 0; i--) {
+			if(i == N-1) {
+				D[i] = arr[i];
+			} else {
+				if(D[i+1] < 0) {			// 0보다 작으면
+					D[i] = arr[i];			// D[i]는 내 자신
+				} else {
+					D[i] = D[i+1] + arr[i];	// 아니면 ++
+				}
+			}
+			if(max < D[i]) {				// max값 갱신
+				max = D[i];
+			}
+		}
+		
+		System.out.println(max);
 		
 	}
 }

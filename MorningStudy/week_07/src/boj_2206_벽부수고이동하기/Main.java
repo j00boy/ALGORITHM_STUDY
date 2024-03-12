@@ -1,11 +1,8 @@
 package boj_2206_벽부수고이동하기;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class Main {
 
@@ -15,13 +12,12 @@ public class Main {
 	static int[][] time;
 	static boolean[][] visited;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Scanner sc = new Scanner(System.in);
 
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+		N = sc.nextInt();
+		M = sc.nextInt();
 		map = new int[N][M];
 		time = new int[N][M];
 		visited = new boolean[N][M];
@@ -36,7 +32,7 @@ public class Main {
 		 */
 
 		for (int r = 0; r < N; r++) {
-			String str = br.readLine();
+			String str = sc.next();
 			for (int c = 0; c < M; c++) {
 				map[r][c] = Character.getNumericValue(str.charAt(c));
 			}
