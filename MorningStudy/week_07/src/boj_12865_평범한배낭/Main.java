@@ -1,13 +1,12 @@
 package boj_12865_평범한배낭;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 
 	static int N; // 물품의 수
 	static int K; // 준서가 버틸 수 있는 무게
-	static int[] D;
+	static int[][] D;
 	static int[] weight;
 	static int[] value;
 
@@ -18,7 +17,7 @@ public class Main {
 		N = sc.nextInt();
 		K = sc.nextInt();
 
-		D = new int[K + 1];
+		D = new int[N+1][K + 1];
 		weight = new int[N + 1];
 		value = new int[N + 1];
 
@@ -36,9 +35,23 @@ public class Main {
 		 * 약간의 스포를 당한 상태에서 시작합니다.
 		 */
 
+		for(int j = 1; j <= K; j++) {
+			for(int i = 1; i <= N; i++) {
+				if(i < weight[i]) {
+					D[i][j] = 0;
+				} else {
+					D[i][j] = value[i];
+				}
+			}
+		}
 		
+		for(int r = 0; r < N+1; r++) {
+			for(int c = 0; c < K+1; c++) {
+				System.out.print(D[r][c] + " ");
+			}
+			System.out.println();
+		}
 		
-		System.out.println(Arrays.toString(D));
 		
 	}
 }
