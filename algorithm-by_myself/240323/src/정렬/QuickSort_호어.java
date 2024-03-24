@@ -2,7 +2,7 @@ package 정렬;
 
 import java.util.Arrays;
 
-public class QuickSort_Hoare {
+public class QuickSort_호어 {
 	
 	static int[] arr;
 	static int[] sortedArr;
@@ -42,16 +42,18 @@ public class QuickSort_Hoare {
 			}
 			
 			if(L < R) {
-				int tmp = arr[L];
-				arr[L] = arr[R];
-				arr[R] = tmp;
+				swap(L, R);
 			}
 		}
 		
-		int tmp = arr[left];
-		arr[left] = arr[R];
-		arr[R] = tmp;
+		swap(left, R);
 		
 		return R;
+	}
+	
+	public static void swap(int a, int b) {
+		int tmp = arr[a];
+		arr[a] = arr[b];
+		arr[b] = tmp;
 	}
 }
