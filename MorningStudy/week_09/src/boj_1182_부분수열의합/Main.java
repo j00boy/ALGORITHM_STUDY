@@ -1,3 +1,7 @@
+/*
+ * 1트: 부분수열이 연속되지 않아도 되는 경우로 생각하였음
+ */
+
 package boj_1182_부분수열의합;
 
 import java.util.Scanner;
@@ -25,12 +29,16 @@ public class Main {
 		
 		powerSet(0);
 		
-		// -1을 해주는 이유는 아무것도 안 고르는 공집합의 부분집합이 있기 때문에 
-		System.out.println(count - 1);
+		// -1을 해주는 이유는 아무것도 안 고르는 공집합의 부분집합이 있기 때문에
+		// S가 0일 때에는 count - 1
+		if(S ==0) {
+			System.out.println(count - 1);
+		} else {
+			System.out.println(count);
+		}
 		
 	}
 	
-	// 1트: 부분수열이 연속되지 않아도 되는 경우로 생각하였음
 	public static void powerSet(int idx) {
 		if(idx == nums.length) {
 			int sum = 0;
