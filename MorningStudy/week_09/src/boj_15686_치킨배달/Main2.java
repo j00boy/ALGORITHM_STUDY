@@ -11,9 +11,9 @@ public class Main2 {
 	static int[][] town;
 	static int count = 0;
 	static int minDist = Integer.MAX_VALUE;
-	static List<int[]> list = new ArrayList<>();
+	static List<int[]> chickens = new ArrayList<>();
 	static List<int[]> houses = new ArrayList<>();
-	static int[][] closed;
+	static int[][] open;
 	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -30,41 +30,33 @@ public class Main2 {
 				town[r][c] = sc.nextInt();
 				
 				if(town[r][c] == 2) {
-					list.add(new int[] {r, c});	// 치킨집 위치 저장
+					chickens.add(new int[] {r, c});	// 치킨집 위치 저장
 					count++;			// 치킨집 갯수 
 				} else if(town[r][c] == 1) {
-					houses.add(new int[] {r, c});	// 치킨집 위치 저장
+					houses.add(new int[] {r, c});	// 집 위치 저장
 				}
 			}
 		}
 		
 		
-		closed = new int[count - M][2];
+		open = new int[M][2];		// 남은 치킨집 위치만 저장할 배열
 		
-		closedDown(0, 0);
+		closedDown(0, 0);			// 폐업 진행
 		
-		System.out.println(minDist);
+		System.out.println(minDist);	// 최소 거리 결과
 		
 	}
 	
+	// 폐업시키기 (조합)
 	public static void closedDown(int idx, int sidx) {
-		if(sidx >= count - M) {
-			
-			for(int i = 0; i < count - M; i++) {
-				town[closed[i][0]][closed[i][1]] = 0;
-			}
-
+		if(sidx >= M) {		// 이때 멈춤
 			// 여기서 치킨 최소 거리를 구함
 			int sum = 0;
 			for(int[] arr : houses) {
-				sum += getInstance(arr[0], arr[1], closed);
+				sum += getDistance(arr[0], arr[1], open);
 			}
 			
-			for(int i = 0; i < count - M; i++) {
-				town[closed[i][0]][closed[i][1]] = 2;
-			}
-						
-			minDist = Math.min(minDist, sum);			
+			minDist = Math.min(minDist, sum);
 			
 			return;
 		}
@@ -73,19 +65,21 @@ public class Main2 {
 			return;
 		}
 		
-		closed[sidx][0] = list.get(idx)[0];
-		closed[sidx][1] = list.get(idx)[1];
+		open[sidx][0] = chickens.get(idx)[0];	// 치킨집 r 값
+		open[sidx][1] = chickens.get(idx)[1];	// 치킨집 c 값
 		
 		closedDown(idx + 1, sidx + 1);
 		closedDown(idx + 1, sidx);
 		
 	}
 	
-	public static int getInstance(int r, int c, int[][] arr) {
+	// 거리 구하기 method
+	public static int getDistance(int r, int c, int[][] arr) {
 		int min = Integer.MAX_VALUE;
 
-		for(int[] i : arr) {
-			min = Math.min(min, Math.abs(r - i[0]) + Math.abs(c - i[1]));
+		for(int[] i : arr) {		// 여기서 들어갈 arr은 폐업시키고 남은 치킨집 위치 배열
+			int dist = Math.abs(r - i[0]) + Math.abs(c - i[1]);		// 거리 구하기
+			min = Math.min(min, dist);								// 최소 거리의 치킨집만 나의 치킨집이다.
 		}
 		
 		return min;

@@ -41,7 +41,7 @@ public class Main {
 		}
 		
 		
-		closed = new int[count - M][2];
+		closed = new int[count - M][2];	// 폐업시킬 치킨집 저장
 		
 		closedDown(0, 0);
 		
@@ -51,7 +51,7 @@ public class Main {
 	
 	public static void closedDown(int idx, int sidx) {
 		if(sidx >= count - M) {
-			
+			// 치킨집 문 닫기
 			for(int i = 0; i < count - M; i++) {
 				town[closed[i][0]][closed[i][1]] = 0;
 			}
@@ -62,6 +62,7 @@ public class Main {
 				sum += getDistance(arr[0], arr[1], 0);
 			}
 			
+			// 다시 열기
 			for(int i = 0; i < count - M; i++) {
 				town[closed[i][0]][closed[i][1]] = 2;
 			}
@@ -135,7 +136,8 @@ public class Main {
 		int min = Integer.MAX_VALUE;
 
 		for(int[] arr : houses) {
-			min = Math.min(min, Math.abs(r - arr[0]) + Math.abs(c - arr[1]));
+			int dist = Math.abs(r - arr[0]) + Math.abs(c - arr[1]);
+			min = Math.min(min, dist);
 		}
 		
 		return min;
