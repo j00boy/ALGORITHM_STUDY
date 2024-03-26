@@ -1,12 +1,10 @@
 package boj_15686_치킨배달;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Scanner;
 
-public class Main {
+public class Main2 {
 	
 	static int N;
 	static int M;
@@ -59,7 +57,7 @@ public class Main {
 			// 여기서 치킨 최소 거리를 구함
 			int sum = 0;
 			for(int[] arr : houses) {
-				sum += getDistance(arr[0], arr[1], 0);
+				sum += getInstance(arr[0], arr[1], closed);
 			}
 			
 			for(int i = 0; i < count - M; i++) {
@@ -83,59 +81,11 @@ public class Main {
 		
 	}
 	
-	public static int getDistance(int r, int c, int depth) {
-		int[] dr = {-1, 1, 0, 0};
-		int[] dc = {0, 0, -1, 1};
-		
-		boolean[][] visited = new boolean[N+1][N+1];
-		Queue<Integer> queue = new LinkedList<Integer>();
-		queue.add(r);
-		queue.add(c);
-		queue.add(0);
-		visited[r][c] = true;
-		int dist = 0;
-		
-		boolean flag = true;
-		while(!queue.isEmpty()) {
-			depth++;
-			int now_r = queue.poll();
-			int now_c = queue.poll();
-			int now_depth = queue.poll();
-			
-			for(int d = 0; d < 4; d++) {
-				int nr = now_r + dr[d];
-				int nc = now_c + dc[d];
-				
-				if(check(nr, nc) && !visited[nr][nc]) {
-					if(town[nr][nc] == 2) {
-						dist = now_depth + 1;
-						flag = false;
-						break;
-					}
-					queue.add(nr);
-					queue.add(nc);
-					queue.add(now_depth + 1);
-					visited[nr][nc] = true;
-				}
-			}
-			
-			if(!flag) {
-				break;
-			}
-		}
-		
-		return dist;
-	}
-	
-	static boolean check(int r, int c) {
-		return r >= 1 && r <= N && c >= 1 && c <= N;
-	}
-	
-	public static int getInstance(int r, int c) {
+	public static int getInstance(int r, int c, int[][] arr) {
 		int min = Integer.MAX_VALUE;
 
-		for(int[] arr : houses) {
-			min = Math.min(min, Math.abs(r - arr[0]) + Math.abs(c - arr[1]));
+		for(int[] i : arr) {
+			min = Math.min(min, Math.abs(r - i[0]) + Math.abs(c - i[1]));
 		}
 		
 		return min;
