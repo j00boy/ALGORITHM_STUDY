@@ -51,12 +51,13 @@ public class Main {
 	}
 	
 	static void DFS(int r, int c, int limit) {
+		if(KOR[r][c] < limit) return;
 		
 		for(int d = 0; d < 4; d++) {
 			int nr = r + dr[d];
 			int nc = c + dc[d];
 			
-			if(check(nr, nc) && !visited[nr][nc] && KOR[nr][nc] >= limit) {
+			if(check(nr, nc) && !visited[nr][nc]) {
 				visited[nr][nc] = true;
 				DFS(nr, nc, limit);
 			}
