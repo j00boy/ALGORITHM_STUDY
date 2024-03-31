@@ -9,71 +9,116 @@
 package boj_17471_게리맨더링;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-
+	
 	static int N;
-	static ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
-	static ArrayList<ArrayList<Integer>> group_A = new ArrayList<ArrayList<Integer>>();
-	static ArrayList<ArrayList<Integer>> group_B = new ArrayList<ArrayList<Integer>>();
-	static int[] p;
-	static boolean[] sel;
+	static ArrayList<Integer>[] adjList;
 	static boolean[] visited;
-	static int depth;
+	static boolean[] connected;
+	static int[] population;
+	static int gap = Integer.MAX_VALUE;
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		N = sc.nextInt();
-		p = new int[N + 1];
-		visited = new boolean[N + 1];
+		adjList = new ArrayList[N+1];
+		visited = new boolean[N+1];
+		connected = new boolean[N+1];
+		population = new int[N+1];
 		
-
-		for (int i = 1; i <= N; i++) {
-			p[i] = sc.nextInt();
+		for(int i = 1; i <= N; i++) {
+			population[i] = sc.nextInt();
 		}
-
-		// 인접리스트 초기화
-		for (int i = 0; i <= N; i++) {
-			list.add(new ArrayList<Integer>());
+		
+		for(int i = 0; i <= N; i++) {
+			adjList[i] = new ArrayList<>();
 		}
-
-		for (int i = 1; i <= N; i++) {
-			int k = sc.nextInt();
-			for (int j = 0; j < k; j++) {
-				list.get(i).add(sc.nextInt());
+		
+		for(int i = 1; i <= N; i++) {
+			int n = sc.nextInt();
+			for(int j = 0; j < n; j++) {
+				adjList[i].add(sc.nextInt());
 			}
 		}
 		
-		for(int i = 1; i < N / 2; i++) {
-			sel = new boolean[N+1];
-		}
-
+		permutation(1);
 		
+		if(gap == Integer.MAX_VALUE) {
+			System.out.println(-1);
+		} else {
+			System.out.println(gap);			
+		}
 		
 	}
-
-	// 1. 단순한 조합 구하기 (6개 모두)
-	public static void comb(int idx, int sidx, int depth) {
-		if(sidx == depth) {
+	// 조합 나누기 (순열)
+	static void permutation(int idx) {
+		if(idx >= N+1) {
 			ArrayList<Integer> A = new ArrayList<>();
 			ArrayList<Integer> B = new ArrayList<>();
 			for(int i = 1; i <= N; i++) {
-				if(sel[i]) {
+				if(visited[i]) {
 					A.add(i);
 				} else {
 					B.add(i);
 				}
 			}
-			group_A.add(A);
-			group_B.add(B);
+			
+			// A나 B가 빈거면 종료
+			if(A.isEmpty() || B.isEmpty()) {
+				return;
+			}
+			
+			// 연결 확인
+			connected = new boolean[N+1];
+			DFS(A.get(0), A);
+			for(int i : A) {
+				// 방문안된게 하나라도 있다면 종료
+				if(!connected[i]) {
+					return;
+				}
+			}
+			
+			
+			connected = new boolean[N+1];
+			DFS(B.get(0), B);
+			for(int i : B) {
+				// 방문안된게 하나라도 있다면 종료
+				if(!connected[i]) {
+					return;
+				}
+			}
+			
+			int diff = Math.abs(getCount(A) - getCount(B));
+			gap = Math.min(gap, diff);
+			
+			return;
 		}
 		
-		sel[idx] = true;
-		comb(idx + 1, sidx + 1, depth);
-		comb(idx + 1, sidx, depth);
+		visited[idx] = true;
+		permutation(idx+1);
+		visited[idx] = false;
+		permutation(idx+1);
 	}
 	
+	// 연결되어있는지 확인하기
+	public static void DFS(int num, ArrayList<Integer> list) {
+		connected[num] = true;
+		for(int i : adjList[num]) {
+			if(!connected[i] && list.contains(i)) {
+				DFS(i, list);
+			}
+		}
+		
+	}
 	
+	public static int getCount(ArrayList<Integer> list) {
+		int sum = 0;
+		for(int i : list) {
+			sum += population[i];
+		}
+		
+		return sum;
+	}
 }
