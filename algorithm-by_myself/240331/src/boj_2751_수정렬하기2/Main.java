@@ -1,4 +1,4 @@
-package boj_10989_수정렬하기3;
+package boj_2751_수정렬하기2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
