@@ -1,8 +1,5 @@
 package boj_14889_스타트와링크;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -10,6 +7,7 @@ public class Main {
 	static int N;
 	static int[][] adj;
 	static int[] start;
+	static int[] link;
 	static boolean[] visited;
 	static int minGap = Integer.MAX_VALUE;
 	static int total = 0;
@@ -19,7 +17,9 @@ public class Main {
 
 		N = sc.nextInt();
 		start = new int[N / 2];
+		link = new int[N / 2];
 		adj = new int[N][N];
+		visited = new boolean[N];
 
 		for (int r = 0; r < N; r++) {
 			for (int c = 0; c < N; c++) {
@@ -35,10 +35,17 @@ public class Main {
 
 	public static void comb(int idx, int sidx) {
 		if (sidx >= N/2) {
-//			System.out.println(Arrays.toString(start));
+			int index_s = 0;
+			int index_l = 0;
 			for(int i = 0; i < N; i++) {
-				
+				if(!visited[i]) {
+					link[index_l++] = i;
+				} else {
+					start[index_s++] = i;
+				}
 			}
+//			System.out.println(Arrays.toString(start));
+//			System.out.println(Arrays.toString(link));
 			int gap = teamWork();
 			minGap = Math.min(gap, minGap);
 			return;
@@ -48,31 +55,22 @@ public class Main {
 			return;
 		}
 
-		start[sidx] = idx;
+		visited[idx] = true;
 		comb(idx + 1, sidx + 1);
+		visited[idx] = false;
 		comb(idx + 1, sidx);
 	}
 
 	public static int teamWork() {
-		int sum1 = 0;
-		for (int i : start) {
-			for(int j : start) {
-				sum1 += adj[i][j];
-				System.out.println(i + " " + j);
+		int sum_s = 0;
+		int sum_l = 0;
+		for(int i = 0; i < N/2; i++) {
+			for(int j = 0; j < N/2; j++) {
+				sum_s += adj[start[i]][start[j]];
+				sum_l += adj[link[i]][link[j]];
 			}
 		}
 
-		for(int i = 0; i < N; i++) {
-			for(int j : start) {
-				if(i != j) {
-					
-				}
-			}
-		}
-		
-		int sum2 = total - sum1;
-
-		return Math.abs(sum1 - sum2);
-
+		return Math.abs(sum_s - sum_l);
 	}
 }
