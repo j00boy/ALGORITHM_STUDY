@@ -1,7 +1,5 @@
 package boj_14503_로봇청소기;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
