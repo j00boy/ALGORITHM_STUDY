@@ -1,6 +1,7 @@
 package boj_16236_아기상어;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 
+		canHunt = true;
 		N = sc.nextInt();
 		pool = new int[N][N];
 		size = 2;
@@ -42,34 +44,21 @@ public class Main {
 			}
 		}
 
-		// 사냥을 계속 할 수 있는지에 대한 flag 변수
-		canHunt = true;
-		while (canHunt) {
-			hunt(init_r, init_c);
-			if(!list.isEmpty()) {
-				kill(list.get(0));
-			}
-			
+		while (canHunt == true) {
+			findPrey(init_r, init_c);
+			if(canHunt == true) kill(list.get(0));
 			print();
-			System.out.println(size);
-			System.out.println(exp);
-			System.out.println();
 		}
 
 		System.out.println(total_distance);
 	}
 
-	public static void hunt(int r, int c) {
-		depth = 0;
-
-		list = new ArrayList<>();
-
+	public static void findPrey(int r, int c) {
 		Queue<Integer> queue = new LinkedList<>();
-
+		list = new ArrayList<>();
 		boolean[][] visited = new boolean[N][N];
 
 		visited[r][c] = true;
-
 		queue.add(r);
 		queue.add(c);
 		queue.add(0);
@@ -82,56 +71,65 @@ public class Main {
 			for (int d = 0; d < 4; d++) {
 				int nr = now_r + dr[d];
 				int nc = now_c + dc[d];
+				int dist = now_dist + 1;
 
-				if (check(nr, nc) && !visited[nr][nc] && pool[nr][nc] <= size) {
-					if (pool[nr][nc] < size && pool[nr][nc] != 0) {
+				if (check(nr, nc) && !visited[nr][nc] && pool[nr][nc] <= size) { // 갈 수는 있음
+					if (pool[nr][nc] == 0 || pool[nr][nc] == size) { // 갈 수만 있음
 						visited[nr][nc] = true;
 						queue.add(nr);
 						queue.add(nc);
-						queue.add(now_dist + 1);
-						if (now_dist + 1 != depth) {
-							if (!list.isEmpty()) {
-								return;
-							}
-							depth++;
-							list.add(new int[] { r, c });
+						queue.add(dist);
+					} else if (pool[nr][nc] != 0 && pool[nr][nc] < size) { // 최단거리의 먹이임
+						if (list.isEmpty()) { // 리스트가 비어 있다 == 아직 먹이를 찾은 적이 없다.
+							list.add(new int[] { nr, nc, dist });
+							visited[nr][nc] = true;
+							queue.add(nr);
+							queue.add(nc);
+							queue.add(dist);
 						} else {
-							list.add(new int[] { r, c });
+							if (dist == list.get(0)[2]) { // 같은 거리에 있는 애들이라면
+								list.add(new int[] { nr, nc, dist });
+								visited[nr][nc] = true;
+								queue.add(nr);
+								queue.add(nc);
+								queue.add(dist);
+							} else {
+								return; // 즉시 종료
+							}
 						}
-					} else {
-						visited[nr][nc] = true;
-						queue.add(nr);
-						queue.add(nc);
-						queue.add(now_dist + 1);
 					}
 				}
 			}
 		}
-
-		canHunt = false;
+		if(list.isEmpty()) {
+			canHunt = false;
+		}
 	}
 
 	public static void kill(int[] arr) {
-		Collections.sort(list, new Comparator<int []>() {
-			
+
+		Collections.sort(list, new Comparator<int[]>() {
+
 			@Override
 			public int compare(int[] o1, int[] o2) {
-				if(o1[0] == o2[1]) {
+				if (o1[0] == o2[0]) {
 					return o1[1] - o2[1];
 				}
 				return o1[0] - o2[0];
 			}
-			
+
 		});
 		
-		total_distance += depth;
-		pool[arr[0]][arr[1]] = 9;
 		pool[init_r][init_c] = 0;
-		exp--;
+		pool[arr[0]][arr[1]] = 9;
+		total_distance += arr[2];
+
 		init_r = arr[0];
 		init_c = arr[1];
-		if(exp == 0) {
-			size++;
+
+		exp -= 1;
+		if (exp == 0) {
+			size += 1;
 			exp = size;
 		}
 	}
@@ -141,11 +139,19 @@ public class Main {
 	}
 
 	public static void print() {
+		System.out.println("-------------");
+		for(int[] arr : list) {
+			System.out.println(Arrays.toString(arr));
+		}
+		System.out.println("-------------");
 		for (int r = 0; r < N; r++) {
 			for (int c = 0; c < N; c++) {
 				System.out.print(pool[r][c] + " ");
 			}
 			System.out.println();
 		}
+		System.out.println("size: " + size);
+		System.out.println("exp: " + exp);
+		System.out.println("-------------");
 	}
 }
