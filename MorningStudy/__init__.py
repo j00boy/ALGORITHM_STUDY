@@ -2,41 +2,36 @@
 ## Create folders
 import os 
 
-## Date
+## Find folder names: day_<number>
+folder_names = os.listdir(os.getcwd())
 
-# exams
-# exams = ['IM', 'IM_prep', 'A', 'A_prep', 'QUEUE', 'STACK', 'LINKED_LIST', 'TREE']
+is_traversed = False
 
-# 설날, 삼일절 
-# events = ['NY1', 'NY2', 'NY3', 'NY4', 'Independence_Movement_Day_0301']
+## Get last folder name formatted "day_{day}"
+for folder_name in folder_names:
+    if folder_name[0] < "d":
+        pass
+    
+    if folder_name[:3] == "day":
+        last_name = folder_name
+        is_traversed = True
+    elif is_traversed and folder_name[:3]:
+        break
+    
+result = last_name.split("_")
+last_cnt = int(result[1])
 
-# practice, 26 days 
-days = [i  for i in range(1, 27)] 
+## Modify its range when needed
+for i in range(1, 11):
+    day = last_cnt + i
 
-total = days
+    if (day >= 100) {
+        print("day_100 이상은 만들 수 없습니다")
+        break;
+    }
 
-# print(total) # double check
-
-
-for t in total:
-    # exams, events
-    if type(t) is str:
-        os.system(f'mkdir {t}')
-        os.chdir(f'{t}')
-
-    # days
-    else:
-        day = str()
-        # single
-        if t <=9:
-            day = '0' + str(t)
-
-        # double
-        else:
-            day = str(t)
-            
-        os.system(f'mkdir day_{day}')
-        os.chdir(f'day_{day}')
-        
+    os.system(f'mkdir day_{day}')
+    os.chdir(f'day_{day}')
+    
     os.system(f'touch .gitkeep README.md')
     os.chdir('..')
