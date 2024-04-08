@@ -1,3 +1,12 @@
+/**
+ * (i, j) 좌표가 있다고 한다면, i * 열의 크기 + j 를 list에 넣으면 더 큰 쉬운 정렬이 가능하다. by 도형
+ * 예를 들어 4 x 4 맵이라고 할 때,
+ * (2,3) 좌표가 있다면 얘의 값은 4 * 2 + 3 = 11;
+ * 다시 값을 추출할 때는 열의 크기로 나눈 몫은 r 좌표,
+ * 나머지는 c 좌표
+ */
+
+
 package boj_16236_아기상어;
 
 import java.util.ArrayList;
@@ -43,11 +52,29 @@ public class Main {
 				}
 			}
 		}
+		
+		pool[init_r][init_c] = 0;
 
 		while (canHunt == true) {
 			findPrey(init_r, init_c);
-			if(canHunt == true) kill(list.get(0));
-			print();
+			if(canHunt == true) {
+				
+				Collections.sort(list, new Comparator<int[]>() {
+
+					@Override
+					public int compare(int[] o1, int[] o2) {
+						if (o1[0] == o2[0]) {
+							return o1[1] - o2[1];
+						}
+						return o1[0] - o2[0];
+					}
+
+				});
+				
+//				System.out.println(Arrays.toString(list.get(0)));
+				kill(list.get(0));
+			}
+//			print();
 		}
 
 		System.out.println(total_distance);
@@ -108,18 +135,6 @@ public class Main {
 
 	public static void kill(int[] arr) {
 
-		Collections.sort(list, new Comparator<int[]>() {
-
-			@Override
-			public int compare(int[] o1, int[] o2) {
-				if (o1[0] == o2[0]) {
-					return o1[1] - o2[1];
-				}
-				return o1[0] - o2[0];
-			}
-
-		});
-		
 		pool[init_r][init_c] = 0;
 		pool[arr[0]][arr[1]] = 9;
 		total_distance += arr[2];
@@ -141,7 +156,7 @@ public class Main {
 	public static void print() {
 		System.out.println("-------------");
 		for(int[] arr : list) {
-			System.out.println(Arrays.toString(arr));
+			System.out.println(Arrays.toString(arr)+" ");
 		}
 		System.out.println("-------------");
 		for (int r = 0; r < N; r++) {
@@ -150,6 +165,7 @@ public class Main {
 			}
 			System.out.println();
 		}
+		System.out.println("dist: " + total_distance);
 		System.out.println("size: " + size);
 		System.out.println("exp: " + exp);
 		System.out.println("-------------");
