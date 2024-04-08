@@ -5,14 +5,13 @@ import java.util.Scanner;
 
 public class Main {
 
-	static boolean[] map;
+	static boolean[] map;	// 주루 플레이트
 	static int inning; // 이닝 수
 	static int[] twins; // 팀
 	static int[][] score;
 	static boolean[] number;
 	static int maxScore;
-	static int outCnt;
-	
+	static int index;	// 공격 순서
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -20,22 +19,21 @@ public class Main {
 		map = new boolean[3];
 		twins = new int[9];
 		number = new boolean[9];
-		number[0] = true;
-		twins[3] = 0;
+		number[3] = true;		// 4번 타자 자리 끝
+		twins[3] = 0;			// 4번 타자는 1번 선수
 		inning = sc.nextInt();
-		score = new int[inning + 1][9];
+		score = new int[inning][9];
 		maxScore = 0;
 
-		// 이닝도 1부터, 타순도 1부터
-		for (int r = 1; r <= inning; r++) {
+		for (int r = 0; r < inning; r++) {
 			for (int c = 0; c < 9; c++) {
 				score[r][c] = sc.nextInt();
 			}
 		}
-		
-		// 이닝만큼 경기가 진행된다.
-		permutation(0);
-		
+
+		// 0번 index 선수는 이미 골라짐
+		permutation(1);
+
 		System.out.println(maxScore);
 
 	}
@@ -43,101 +41,89 @@ public class Main {
 	// 타순을 구하는 함수
 	public static void permutation(int idx) {
 		if (idx >= 9) {
-			// 여기서 타순으로 점수를 계산해줘야 함
-			System.out.println(Arrays.toString(twins));
+//			System.out.println(Arrays.toString(twins));
+			index = 0;
+			playBall();
 			return;
 		}
 
 		for (int i = 0; i < 9; i++) {
-			if (number[i]) {
+			if (number[i]) {	// 3번 index 알아서 넘김
 				continue;
 			}
-			
-			if(idx == 3) {
-				permutation(idx + 1);
-			} else {
-				number[i] = true;
-				twins[idx] = i;
-				permutation(idx + 1);
-				number[i] = false;
-			}
+
+			number[i] = true;	// 4번 타자를 제외한 자리를 점하고
+			twins[i] = idx;		// 그 자리에 idx 선수를 넣음
+			permutation(idx + 1);	// idx+1번 선수 자리 구함
+			number[i] = false;		// 재귀 후 다시 안 고른 척
 		}
 	}
-	
-	public static void getScore(int inn, int idx, int out, int sum) {
-		if(inn >= inning && out >= 3) {
-			maxScore = Math.max(sum, maxScore);
-			return;
-		}
-		
-		if(out >= 3) {
-			getScore(inn + 1, idx + 1, 0, sum);
-		}
-		
-		if(score[inn][twins[idx]] == 0) {
-			out++;
-			getScore(inn, (idx + 1) % 9, out + 1, sum);
-		} else if(score[inn][twins[idx]] == 1) {
-			if(map[3]) {
-				map[3] = false;
-				sum += 1;
-			}
-			for(int i = 2; i >= 0; i--) {
-				if(map[i]) {
-					map[i] = false;
-					map[i+1] = true;
-				}
-			}
-			
-			getScore(inn, (idx + 1) % 9, out, sum);
-			
-		} else if(score[inn][twins[idx]] == 2) {
-			if(map[3]) {
-				map[3] = false;
-				sum += 1;
-			}
-			
-			if(map[2]) {
-				map[2] = false;
-				sum += 1;
-			}
-			
-			for(int i = 1; i >= 0; i--) {
-				if(map[i]) {
-					map[i] = false;
-					map[i+2] = true;
-				}
-			}
-			
-			getScore(inn, (idx + 1) % 9, out, sum);
-			
-		} else if(score[inn][twins[idx]] == 3) {
-			
-			if(map[0]) {
-				map[0] = false;
-				map[3] = true;
-				sum += 1;
-			}
-			
-			for(int i = 1; i <= 3; i++) {
-				if(map[i]) {
-					map[i] = false;
+
+	public static void playBall() {
+		int sum = 0;
+
+		for (int r = 0; r < inning; r++) {
+			map = new boolean[3];
+			int outCnt = 0;
+
+			// 3아웃이면 이닝 끝
+			while (outCnt < 3) {
+				if (score[r][twins[index]] == 0) {
+					outCnt++;
+					index = (index + 1) % 9;
+					continue;
+				} else if (score[r][twins[index]] == 1) {
+					if (map[2]) {
+						map[2] = false;
+						sum += 1;
+					}
+					for (int i = 1; i >= 0; i--) {
+						if (map[i]) {
+							map[i] = false;
+							map[i + 1] = true;
+						}
+					}
+					map[0] = true;
+					index = (index + 1) % 9;
+					continue;
+				} else if (score[r][twins[index]] == 2) {
+					for (int i = 2; i >= 1; i--) {
+						if (map[i]) {
+							map[2] = false;
+							sum += 1;
+						}
+					}
+					map[1] = true;
+					if (map[0]) {
+						map[0] = false;
+						map[2] = true;
+					}
+					index = (index + 1) % 9;
+					continue;
+				} else if (score[r][twins[index]] == 3) {
+					for (int i = 0; i < 3; i++) {
+						if (map[i]) {
+							map[i] = false;
+							sum += 1;
+						}
+					}
+					map[2] = true;
+					index = (index + 1) % 9;
+					continue;
+				} else {
+					for (int i = 0; i < 3; i++) {
+						if (map[i]) {
+							map[i] = false;
+							sum += 1;
+						}
+					}
 					sum += 1;
+					index = (index + 1) % 9;
+					continue;
 				}
 			}
-			
-			getScore(inn, (idx + 1) % 9, out, sum);
-			
-		} else {
-			for(int i = 0; i < 4; i++) {
-				if(map[i]) {
-					map[i] = false;
-					sum += 1;
-				}
-			}
-			
-			getScore(inn, (idx + 1) % 9, out, sum);
-			
 		}
+
+		maxScore = Math.max(sum, maxScore);
 	}
 }
