@@ -51,20 +51,8 @@ public class Main {
 
 			if (R >= C) {			// 행이 더 길면 행 정렬
 				cal_R();
-//				for (int r = 0; r < 100; r++) {
-//					for (int c = 0; c < 100; c++) {
-//						System.out.print(A[r][c] + " ");
-//					}
-//					System.out.println();
-//				}
 			} else {				// 열이 더 길면 열 정렬
 				cal_C();
-//				for (int r = 0; r < 100; r++) {
-//					for (int c = 0; c < 100; c++) {
-//						System.out.print(A[r][c] + " ");
-//					}
-//					System.out.println();
-//				}
 			}
 		}
 
@@ -112,9 +100,7 @@ public class Main {
 		} else {
 			C = max;
 		}
-//		System.out.println("C :" + C);
 		min++;
-//		System.out.println(min);
 	}
 
 	// 열 연산
@@ -154,8 +140,6 @@ public class Main {
 			R = max;
 		}
 
-//		System.out.println("R :" + R);
 		min++;
-//		System.out.println(min);
 	}
 }
