@@ -6,6 +6,7 @@ public class Main2 {
 	
 	static int N;
 	static char[][] arr;
+	static StringBuilder sb = new StringBuilder();
 	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -16,6 +17,8 @@ public class Main2 {
 		printStar(0, 0, N);
 		
 		print();
+		
+		System.out.println(sb);
 	}
 	
 	
@@ -77,9 +80,9 @@ public class Main2 {
 	public static void print() {
 		for(int r = 0; r < N; r++) {
 			for(int c = 0; c < N; c++) {
-				System.out.print(arr[r][c] + " ");
+				sb.append(arr[r][c] + " ");
 			}
-			System.out.println();
+			sb.append("\n");
 		}
 	}
 	
