@@ -1,12 +1,8 @@
 package boj_5639_이진검색트리;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-
-	static ArrayList<Node> tree;
 
 	static class Node {
 		int data;
@@ -28,58 +24,44 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 
-		tree = new ArrayList<>();
+		Node root = new Node(sc.nextInt()); // 50
 
-		while (sc.hasNext()) {
-
+		while (sc.hasNext()) {		// 이거만 코드 참고
 			int num = sc.nextInt();
-
 			if (num == 0) {
 				break;
 			}
 
-			if (tree.isEmpty()) {
-				tree.add(new Node(num));
-			} else if (num < tree.get(tree.size() - 1).data) {
-				Node node = new Node(num);
-				tree.add(node);
-				tree.get(tree.size() - 1).left = node;
-			} else {
-				boolean flag = true;
-				for (int i = tree.size() - 1; i >= 0; i--) {
-					if (tree.get(i).data > num) {
-						flag = false;
-						Node node = new Node(num);
-						tree.add(node);
-						tree.get(i).right = node;
+			Node curr = root;	// 매 while문마다 curr값 초기화
+			while (true) {
+				if (num < curr.data) {	// 작을 때
+					if (curr.left == null) {
+						curr.left = new Node(num);
 						break;
+					} else {
+						curr = curr.left;
 					}
-				}
-
-				if(flag) {
-					Node node = new Node(num);
-					tree.add(node);
-					tree.get(0).right = node;
+				} else {				// 클 때
+					if (curr.right == null) {
+						curr.right = new Node(num);
+						break;
+					} else {
+						curr = curr.right;
+					}
 				}
 			}
 		}
 
-		postorder(tree.get(0));
-//		System.out.println(tree.get(0).right.data);
-//		for (int i = 0; i < tree.size(); i++) {
-//			System.out.println(tree.get(i).data);
-//		}
-
+		postorder(root);
 	}
 
-	// 전위 순회 : VLR
-
-	// 후위 순회 : LRV
 	public static void postorder(Node node) {
-		if(node != null) {
-			postorder(node.left);
-			postorder(node.right);
-			System.out.println(node.data);
+		if (node == null) {
+			return;
 		}
+
+		postorder(node.left);
+		postorder(node.right);
+		System.out.println(node.data);
 	}
 }
