@@ -26,23 +26,15 @@ public class Main {
 		D = new int[n][k + 1];
 
 		for (int c = 0; c < k + 1; c++) {
-			if (c < coins[0]) {
-				D[0][c] = 0;
-			} else {
-				if (c % coins[0] == 0) {
-					D[0][c] = 1;
-				} else {
-					D[0][c] = D[0][c-1];
-				}
-			}
+			D[0][c] = 1;
 		}
 
 		for (int r = 1; r < n; r++) {
 			for (int c = 1; c < k + 1; c++) {
-				if(c % coins[r] == 0) {
-					D[r][c] = D[r-1][c] + D[r][c-1];
+				if (c < coins[r]) {
+					D[r][c] = D[r - 1][c];
 				} else {
-					D[r][c] = Math.max(D[r-1][c], D[r][c-1]);
+					D[r][c] = Math.max(D[r - 1][c], D[r][c - 1]);
 				}
 			}
 		}
