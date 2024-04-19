@@ -26,28 +26,30 @@ public class Main {
 		
 		// 행 검사
 		for(int r = 0; r < N; r++) {
+			// 시작점을 정해놓고 하겠다는 뜻
+			int idx = 1;
 			int hgt = map[r][0];
-			int count = 1;
+			int count = 1;	
 			boolean canGo = true;
-			for(int c = 1; c < N; c++) {
-				if(map[r][c] == hgt) {
+			
+			while(idx < N) {
+				if(map[r][idx] == hgt) {
 					count++;
-				} else if(Math.abs(map[r][c] - hgt) > 1) {
-					canGo = false;
-					break;
-				} else if((map[r][c] - hgt) == 1) {	// 지금 나온게 더 클 때
-					if(count > L) {
-						hgt = map[r][c];
-						count = 1;
+					idx++;
+				} else if((map[r][idx] - hgt) == 1) {	// 지금 나온게 더 클 때
+					if(count >= L) {
+						hgt = map[r][idx];
+						count = 1;						// 지금 나온 위치에는 경사로를 까는게 아니니까 count = 1
+						idx++;
 					} else {
 						canGo = false;
 						break;
 					}
-				} else if((map[r][c] - hgt) == -1) {
-					if(check(r, c+L)) {
+				} else if((map[r][idx] - hgt) == -1) {	// 더 작은게 나올 때
+					if(check(r, idx+L-1)) {
 						boolean flag = true;
-						for(int i = c; i < c+L; i++) {
-							if(map[r][i] != map[r][c]) {
+						for(int i = idx; i <= idx + L - 1; i++) {
+							if(map[r][i] != map[r][idx]) {
 								flag = false;
 								break;
 							}
@@ -56,61 +58,81 @@ public class Main {
 							canGo = false;
 							break;
 						}
-						hgt = map[r][c];
-						count = 1;
+						hgt = map[r][idx];
+						count = 0;						// 지금 나온 위치에 경사로를 깔아야 하기 때문에 count = 0
+						idx += L;
 					} else {
 						canGo = false;
 						break;
 					}
+				} else {
+					canGo = false;
+					break;
 				}
 			}
-			if(canGo) road++;
+		
+			if(canGo) {
+				road++;
+//				System.out.println("순서 " + road + " : " + r);
+			}
 		}
 		
 		
 		// 열 검사
 		for(int c = 0; c < N; c++) {
+			int idx = 1;
 			int hgt = map[0][c];
 			int count = 1;
 			boolean canGo = true;
-			for(int r = 1; r < N; r++) {
-				if(map[r][c] == hgt) {
+			
+			while(idx < N) {
+				if(map[idx][c] == hgt) {
 					count++;
-				} else if(Math.abs(map[r][c] - hgt) > 1) {
-					canGo = false;
-					break;
-				} else if((map[r][c] - hgt) == 1) {	// 지금 나온게 더 클 때
-					if(count > L) {
-						hgt = map[r][c];
+					idx++;
+				} else if((map[idx][c] - hgt) == 1) {	// 지금 나온게 더 클 때
+					if(count >= L) {
+						hgt = map[idx][c];
 						count = 1;
+						idx++;
 					} else {
 						canGo = false;
+//						System.out.println("안되는 곳 " + c + " : " + idx);
 						break;
 					}
-				} else if((map[r][c] - hgt) == -1) {
-					if(check(r, c+L)) {
+				} else if((map[idx][c] - hgt) == -1) {	// 더 작은게 나올 때
+					if(check(idx + L - 1, c)) {
 						boolean flag = true;
-						for(int i = c; i < c+L; i++) {
-							if(map[r][i] != map[r][c]) {
+						for(int i = idx; i <= idx + L - 1; i++) {
+							if(map[i][c] != map[idx][c]) {
 								flag = false;
 								break;
 							}
 						}
 						if(!flag) {
 							canGo = false;
+//							System.out.println("안되는 곳 " + c + " : " + idx);
 							break;
 						}
-						hgt = map[r][c];
-						count = 1;
+						hgt = map[idx][c];
+						count = 0;
+						idx += L;
 					} else {
 						canGo = false;
+//						System.out.println("안되는 곳 " + c + " : " + idx);
 						break;
 					}
+				} else {
+					canGo = false;
+					break;
 				}
 			}
-			if(canGo) road++;
+			
+			if(canGo) {
+				road++;
+//				System.out.println("순서 " + road + " : " + c);
+			}
 		}
-		
+				
 		System.out.println(road);
 		
 	}
