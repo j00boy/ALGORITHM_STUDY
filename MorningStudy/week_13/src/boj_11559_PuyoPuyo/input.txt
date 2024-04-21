@@ -1,0 +1,47 @@
+// -- tc 1 --
+......
+......
+.YGB..
+.BGY..
+.BGY..
+.BGY..
+.GBY..
+.GBBY.
+.BGGG.
+.YGGY.
+.YGGY.
+.YBBB.
+    
+ans = 2
+    
+// -- tc 2 --
+......
+..YY..
+.YGB..
+.BGY..
+.BGY..
+.BGY..
+.GBY..
+.GBBY.
+.BGGG.
+.YGGY.
+.YGGY.
+.YBBB.
+    
+ans = 2
+    
+// -- tc 3 --
+......
+..YY..
+.YGB..
+.BGY..
+.BGY..
+.BYB..
+.GBY..
+.GBBB.
+.BGGG.
+.YGGY.
+.YGGY.
+.YBBB.
+    
+ans = 4
