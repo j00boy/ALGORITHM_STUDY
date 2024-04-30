@@ -1,10 +1,11 @@
 package boj_12100_2048Easy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class Main3 {
 
 	static int playCnt;
 	static int max;
@@ -13,7 +14,6 @@ public class Main {
 	static int[][][] map;
 
 	public static void main(String[] args) {
-		
 		Scanner sc = new Scanner(System.in);
 
 		playCnt = 0;
@@ -35,19 +35,19 @@ public class Main {
 
 	}
 
-	public static void play(int cnt) {
+	static void play(int cnt) {
 
 		if (cnt == 2) {
-			playCnt++;
+//			playCnt++;
 			print(cnt);
 			getMax(cnt);
 			return;
 		}
-		
+
 		for (int d = 0; d < 4; d++) {
+			beingEmpty(cnt);
 			switch (d) {
 			case 0:
-				beingEmpty(cnt);
 				for (int c = 0; c < N; c++) {
 					List<Integer> list = new ArrayList<>();
 					for (int r = 0; r < N; r++) {
@@ -71,7 +71,7 @@ public class Main {
 						int idx = 0;
 						while (idx < list.size() - 1) {
 							if (list.get(idx) == list.get(idx + 1)) {
-								list.set(idx, list.get(idx) + list.get(idx + 1));
+								list.set(idx, list.get(idx) * 2);
 								list.set(idx + 1, 0);
 								idx += 2;
 							} else {
@@ -95,7 +95,6 @@ public class Main {
 				play(cnt + 1);
 				break;
 			case 1:
-				beingEmpty(cnt);
 				for (int c = 0; c < N; c++) {
 					List<Integer> list = new ArrayList<>();
 					for (int r = N - 1; r >= 0; r--) {
@@ -119,7 +118,7 @@ public class Main {
 						int idx = 0;
 						while (idx < list.size() - 1) {
 							if (list.get(idx) == list.get(idx + 1)) {
-								list.set(idx, list.get(idx) + list.get(idx + 1));
+								list.set(idx, list.get(idx) * 2);
 								list.set(idx + 1, 0);
 								idx += 2;
 							} else {
@@ -144,7 +143,6 @@ public class Main {
 				play(cnt + 1);
 				break;
 			case 2:
-				beingEmpty(cnt);
 				for (int r = 0; r < N; r++) {
 					List<Integer> list = new ArrayList<>();
 					for (int c = 0; c < N; c++) {
@@ -168,7 +166,7 @@ public class Main {
 						int idx = 0;
 						while (idx < list.size() - 1) {
 							if (list.get(idx) == list.get(idx + 1)) {
-								list.set(idx, list.get(idx) + list.get(idx + 1));
+								list.set(idx, list.get(idx) * 2);
 								list.set(idx + 1, 0);
 								idx += 2;
 							} else {
@@ -192,7 +190,6 @@ public class Main {
 				play(cnt + 1);
 				break;
 			default:
-				beingEmpty(cnt);
 				for (int r = 0; r < N; r++) {
 					List<Integer> list = new ArrayList<>();
 					for (int c = N - 1; c >= 0; c--) {
@@ -216,7 +213,7 @@ public class Main {
 						int idx = 0;
 						while (idx < list.size() - 1) {
 							if (list.get(idx) == list.get(idx + 1)) {
-								list.set(idx, list.get(idx) + list.get(idx + 1));
+								list.set(idx, list.get(idx) * 2);
 								list.set(idx + 1, 0);
 								idx += 2;
 							} else {
@@ -245,7 +242,7 @@ public class Main {
 
 	}
 
-	public static void getMax(int cnt) {
+	static void getMax(int cnt) {
 		for (int r = 0; r < N; r++) {
 			for (int c = 0; c < N; c++) {
 				if (map[r][c][cnt - 1] != 0) {
@@ -255,7 +252,7 @@ public class Main {
 		}
 	}
 	
-	public static void beingEmpty(int cnt) {
+	static void beingEmpty(int cnt) {
 		for(int r = 0; r < N; r++) {
 			for(int c = 0; c < N; c++) {
 				map[r][c][cnt] = 0;
@@ -263,7 +260,7 @@ public class Main {
 		}
 	}
 
-	public static void print(int cnt) {
+	static void print(int cnt) {
 		System.out.println("----------------------------");
 		for (int r = 0; r < N; r++) {
 			for (int c = 0; c < N; c++) {

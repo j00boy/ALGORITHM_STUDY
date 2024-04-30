@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
+public class Main2 {
 
 	static int playCnt;
 	static int max;
@@ -13,7 +13,7 @@ public class Main {
 	static int[][][] map;
 
 	public static void main(String[] args) {
-		
+
 		Scanner sc = new Scanner(System.in);
 
 		playCnt = 0;
@@ -43,7 +43,7 @@ public class Main {
 			getMax(cnt);
 			return;
 		}
-		
+
 		for (int d = 0; d < 4; d++) {
 			switch (d) {
 			case 0:
@@ -51,12 +51,7 @@ public class Main {
 				for (int c = 0; c < N; c++) {
 					List<Integer> list = new ArrayList<>();
 					for (int r = 0; r < N; r++) {
-						if (map[r][c][cnt - 1] == 0) {
-							continue;
-						} else {
-							list.add(map[r][c][cnt - 1]);
-						}
-
+						list.add(map[r][c][cnt - 1]);
 					}
 					if (list.isEmpty()) {
 						continue;
@@ -254,10 +249,10 @@ public class Main {
 			}
 		}
 	}
-	
+
 	public static void beingEmpty(int cnt) {
-		for(int r = 0; r < N; r++) {
-			for(int c = 0; c < N; c++) {
+		for (int r = 0; r < N; r++) {
+			for (int c = 0; c < N; c++) {
 				map[r][c][cnt] = 0;
 			}
 		}
