@@ -39,14 +39,21 @@ public class Main {
 			sumArr[i + 1] = sum;
 		}
 		
-//		System.out.println(Arrays.toString(sumArr));
+		System.out.println(Arrays.toString(sumArr));
+		
 		if(sum < S) {
 			System.out.println(0);
 			return;
 		}
 		
+		// 누적합과 관련된 실연산, 투포인터 ?
+		leng = 100000;
+		int left = 0;
+		int right = arr.length;
 		
-		
+		while(left < right) {
+			
+		}
 		
 	}
 }
