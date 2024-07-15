@@ -62,19 +62,18 @@ public class Main {
 					D[r][c] = 0;
 				} else {	// 목장을 지을 수 있을 때
 					D[r][c] = Math.min(Math.min(D[r-1][c] + 1, D[r][c-1] + 1), D[r-1][c-1] + 1);
-					max = Math.max(max, D[r][c]);
 				}
 			}
 		}
 		
-		System.out.println(max);
+//		System.out.println(max);
 		
-//		for(int r = 0; r < M; r++) {
-//			for(int c = 0; c < N; c++) {
-//				System.out.print(D[r][c] + " ");
-//			}
-//			System.out.println();
-//		}
+		for(int r = 0; r < M; r++) {
+			for(int c = 0; c < N; c++) {
+				System.out.print(D[r][c] + " ");
+			}
+			System.out.println();
+		}
 		
 	}
 }
