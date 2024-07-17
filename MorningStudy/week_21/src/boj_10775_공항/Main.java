@@ -9,7 +9,7 @@ public class Main {
 	
 	static int G;
 	static int P;
-	static boolean[] isFull;
+	static int[] parents;
 	static int count;
 	
 	public static void main(String[] args) throws NumberFormatException, IOException {
@@ -20,13 +20,17 @@ public class Main {
 		G = Integer.parseInt(br.readLine());
 		P = Integer.parseInt(br.readLine());
 		
-		isFull = new boolean[G+1];
+		parents = new int[G+1];
+		
+		for(int i = 0; i < parents.length; i++) {
+			parents[i] = i;
+		}
+		
 		count = 0;
 		
 		for(int i = 0; i < P; i++) {
 			int gateNo = Integer.parseInt(br.readLine());
 			
-			findGate(gateNo);
 			
 		}
 //		System.out.println(Arrays.toString(isFull));
@@ -34,13 +38,17 @@ public class Main {
 		System.out.println(count);
 	}
 	
-	public static void findGate(int gateNo) {
-		for(int i = gateNo; i >= 1; i--) {
-			if(!isFull[i]) {
-				isFull[i] = true;
-				count++;
-				break;
-			}
+	// 부모찾기
+	public static int findParents(int v) {
+		if(v != parents[v]) {
+			parents[v] = findParents(parents[v]);
 		}
+		
+		return parents[v];
+	}
+	
+	// 합치기
+	public static void union(int a, int b) {
+		parents[findParents(a)] = findParents(b);
 	}
 }
