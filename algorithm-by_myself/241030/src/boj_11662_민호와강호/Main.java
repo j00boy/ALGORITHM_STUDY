@@ -9,30 +9,35 @@ public class Main {
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		int Ax = Integer.parseInt(st.nextToken());
-		int Ay = Integer.parseInt(st.nextToken());
-		int Bx = Integer.parseInt(st.nextToken());
-		int By = Integer.parseInt(st.nextToken());
-		int Cx = Integer.parseInt(st.nextToken());
-		int Cy = Integer.parseInt(st.nextToken());
-		int Dx = Integer.parseInt(st.nextToken());
-		int Dy = Integer.parseInt(st.nextToken());
+		double Ax = Double.parseDouble(st.nextToken());
+		double Ay = Double.parseDouble(st.nextToken());
+		double Bx = Double.parseDouble(st.nextToken());
+		double By = Double.parseDouble(st.nextToken());
+		double Cx = Double.parseDouble(st.nextToken());
+		double Cy = Double.parseDouble(st.nextToken());
+		double Dx = Double.parseDouble(st.nextToken());
+		double Dy = Double.parseDouble(st.nextToken());
 		
-		// 기울기 = (y2 - y1) / (x2 - x1)
+		List<Double> minho = new ArrayList<>();
+		List<Double> kangho = new ArrayList<>();
 		
-		double A = (double) (By - Ay) / (double) (Bx - Ax);
-		double B = (double) (Dy - Cy) / (double) (Dx - Cx);
-		double gap = B / A;
+		double minhoX = (Bx - Ax) / 1000000;
+		double minhoY = (By - Ay) / 1000000;
 		
-		double min = Math.sqrt(Math.pow(Cx - Ax, 2) + Math.pow(Cy - Ay, 2));
+		double kanghoX = (Dx - Cx) / 1000000;
+		double kanghoY = (Dy - Cy) / 1000000;
 		
-		double left = 0;
-		double right = Math.sqrt(Math.pow(Bx - Ax, 2) + Math.pow(By - Ay, 2));
-
-		while(left <= right) {
-			double mid = (left + right) / 2;
+		double min = Double.MAX_VALUE;
+		
+		for(int i = 0; i <= 1000000; i++) {
+			double xGap = (Cx - Ax) + (kanghoX - minhoX) * i;
+			double yGap = (Cy - Ay) + (kanghoY - minhoY) * i;
 			
+			double totalGap = Math.sqrt(Math.pow(xGap, 2) + Math.pow(yGap, 2));
 			
+			min = Math.min(totalGap, min);
 		}
+		
+		System.out.println(min);
 	}
 }
